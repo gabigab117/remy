@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Inscription</title>
+<title>Profile</title>
 {% endblock %}
 
 {% block body %}
@@ -13,9 +13,10 @@
 {% csrf_token %}
     {{ form.as_p }}
 
-<input type="submit" value="S'inscrire" class="btn btn-outline-primary">
+<input type="submit" value="Modifier" class="btn btn-outline-primary">
 </form>
                 </div>
     </div>
 </div>
+{{ error }}
 {% endblock %}

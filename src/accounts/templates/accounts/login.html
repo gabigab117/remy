@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Connexion</title>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+<form method="post" class="form">
+    {% csrf_token %}
+<label for="email">Email</label>
+  <input name="email" id="email" type="email">
+
+<label for="password">Mot de passe</label>
+  <input type="password" name="password" id="password">
+
+<input type="submit" value="Connexion" class="btn btn-outline-primary">
+</form>
+                </div>
+    </div>
+</div>
+<h3>{{ error }}</h3>
+{% endblock %}
