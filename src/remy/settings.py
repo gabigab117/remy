@@ -130,6 +130,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "accounts.Thinker"
+LOGIN_URL = "account:login"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.yahoo.com'
@@ -138,3 +142,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_ID')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PW')
 DEFAULT_FROM_EMAIL = 'noreply<gabrieltrouve5@yahoo.com>'
+
+
+# verify email params
+HTML_MESSAGE_TEMPLATE = "accounts/activate/email_activation_template.html"
+SUBJECT = "Vérification de l'adresse Email (Rémy)"
+VERIFICATION_SUCCESS_TEMPLATE = "accounts/activate/verification_success.html"

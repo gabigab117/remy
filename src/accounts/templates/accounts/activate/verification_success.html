@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Vérification ok !</title>
+{% endblock %}
+
+{% block body %}
+<p>Votre adresse email est bien vérifiée.</p>
+<p>Vous pouvez désormais vous connecter.</p>
+<a href="{% url 'account:login' %}" class="btn btn-outline-primary">Connexion</a>
+{% endblock %}
