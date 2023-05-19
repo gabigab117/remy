@@ -1,7 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetDoneView, \
+    PasswordResetConfirmView, PasswordResetCompleteView
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from verify_email.email_handler import send_verification_email
 from .forms import ThinkerCreationForm, ThinkerProfilForm
 from .models import Thinker
@@ -25,7 +28,7 @@ def signup(request):
 
 def activate_account(request):
     context = {}
-    return render(request, "accounts/signup_valid.html", context=context)
+    return render(request, "accounts/signup-valid.html", context=context)
 
 
 def login_thinker(request):
@@ -68,3 +71,27 @@ def profil_thinker(request):
     context['form'] = ThinkerProfilForm(initial=model_to_dict(request.user, exclude='password'))
 
     return render(request, "accounts/profil.html", context=context)
+
+
+class ThinkerPasswordChange(PasswordChangeView):
+    template_name = "accounts/change-password.html"
+    success_url = reverse_lazy('index')
+
+
+class ThinkerPasswordReset(PasswordResetView):
+    email_template_name = "accounts/reset-password-email.html"
+    template_name = "accounts/reset-password.html"
+    success_url = reverse_lazy("account:reset-done")
+
+
+class ThinkerPasswordResetDone(PasswordResetDoneView):
+    template_name = "accounts/reset-password-done.html"
+
+
+class ThinkerPasswordResetConfirm(PasswordResetConfirmView):
+    template_name = "accounts/reset-password-confirm.html"
+    success_url = reverse_lazy("account:reset-complete")
+
+
+class ThinkerPasswordResetComplete(PasswordResetCompleteView):
+    template_name = "accounts/reset-password-complete.html"

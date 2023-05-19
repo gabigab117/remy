@@ -10,6 +10,7 @@ class ThinkerCreationForm(UserCreationForm):
 
 
 class ThinkerProfilForm(forms.ModelForm):
+    # disabled True va griser le champ. On verra les infos affichées mais rien ne sera envoyé
     email = forms.EmailField(help_text="L'email ne peut pas être modifié ici")
     password = forms.CharField(widget=forms.PasswordInput())
     first_name = forms.CharField(disabled=True, max_length=100)
