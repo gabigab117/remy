@@ -37,12 +37,14 @@ class Idea(models.Model):
 
     def email_to_admin_idea(self):
         moderators: Moderator = Moderator.objects.all()
+        ideas = Idea.objects.all()
 
-        email = send_mail(subject=f"{self.thinker} a soumis {self.name}",
-                          message=f"{self.thinker} a soumis une idée :\n {self.details}",
-                          from_email="gabrieltrouve5@yahoo.com",
-                          recipient_list=[moderator.email for moderator in moderators])
-        return email
+        if not self in ideas:
+            email = send_mail(subject=f"{self.thinker} a soumis {self.name}",
+                              message=f"{self.thinker} a soumis une idée :\n {self.details}",
+                              from_email="gabrieltrouve5@yahoo.com",
+                              recipient_list=[moderator.email for moderator in moderators])
+            return email
 
     def __str__(self):
         return self.name
@@ -50,9 +52,7 @@ class Idea(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-
         self.email_to_admin_idea()
-
         super().save(*args, **kwargs)
 
     class Meta:
@@ -74,12 +74,13 @@ class RequestIdea(models.Model):
 
     def email_to_admin_request(self):
         moderators: Moderator = Moderator.objects.all()
-
-        email = send_mail(subject=f"{self.thinker} recherche {self.name}",
-                          message=f"{self.thinker} recherche :\n {self.details}",
-                          from_email="gabrieltrouve5@yahoo.com",
-                          recipient_list=[moderator.email for moderator in moderators])
-        return email
+        requestideas = RequestIdea.objects.all()
+        if not self in requestideas:
+            email = send_mail(subject=f"{self.thinker} recherche {self.name}",
+                              message=f"{self.thinker} recherche :\n {self.details}",
+                              from_email="gabrieltrouve5@yahoo.com",
+                              recipient_list=[moderator.email for moderator in moderators])
+            return email
 
     def __str__(self):
         return self.name
