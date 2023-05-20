@@ -50,3 +50,14 @@ class Thinker(AbstractUser):
 
                     return self.phone
         return self.phone
+
+
+class Moderator(models.Model):
+    email = models.EmailField(max_length=100)
+    pseudo = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.pseudo
+
+    class Meta:
+        verbose_name = "Modérateur"
