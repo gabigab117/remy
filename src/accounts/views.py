@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetDoneView, \
     PasswordResetConfirmView, PasswordResetCompleteView
