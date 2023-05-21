@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Index</title>
+
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+<h2 class="display-2">Bienvenu(e) sur Rémy Project</h2>
+<p>Les inventions, découvertes, innovations ont considérablement augmenté nos niveaux de vie depuis 2 siècles.
+  Toute fois leurs impacts environnementaux n'ont pratiquement jamais été pris en compte et nous souhaitons que cela change.
+  Par ailleurs, nous pensons que la créativité d'une foule sera toujours plus riche que celles de certains experts.
+  C'est ce mélange de créativité issu de la multitude prenant en compte les effets environnementaux sur les idées que
+  nous souhaitons mettre en œuvre en créant un service d'offres et de demandes d'idées rémunéré et ouvert à tous.</p>
+</div>
+
+
+<div class="container">
+  <div class="row">
+     <div class="col-6">
+       {% for idea in ideas %}
+    <div class="card" style="margin-top: 15px;">
+  <div class="card-header">
+    {{ idea }}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Special title treatment</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+
+       {% endfor %}
+    </div>
+    <div class="col-6">
+      {% for request_idea in request_ideas %}
+    <div class="card" style="margin-top: 15px;">
+  <div class="card-header">
+    {{ request_idea }}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Special title treatment</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+       {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
