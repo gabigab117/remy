@@ -6,7 +6,7 @@ admin.site.register(Category)
 
 @admin.register(Idea)
 class IdeaAdmin(admin.ModelAdmin):
-    list_display = ("name", "summary", "level", "category", "thinker", "status")
+    list_display = ("name", "summary", "level", "category", "thinker", "date", "status")
     list_editable = ("status", )
     list_display_links = ("name", )
     search_fields = ("name", "details", "summary", )
@@ -15,7 +15,7 @@ class IdeaAdmin(admin.ModelAdmin):
 
 @admin.register(RequestIdea)
 class RequestIdea(admin.ModelAdmin):
-    list_display = ("name", "summary", "level", "category", "thinker", "status")
+    list_display = ("name", "summary", "level", "category", "thinker", "date", "status")
     list_editable = ("status", )
     list_display_links = ("name", )
     search_fields = ("name", "details", "summary", )
