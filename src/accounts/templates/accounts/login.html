@@ -17,12 +17,12 @@
 <label for="password">Mot de passe</label>
   <input type="password" name="password" id="password">
 
-<input type="submit" value="Connexion" class="btn btn-outline-primary">
+<input type="submit" value="Connexion" class="btn btn-outline-dark">
 </form>
                 </div>
     </div>
 
 <h3>{{ error }}</h3>
-<a href="{% url 'account:reset-password' %}" class="btn btn-outline-warning" style="margin-top: 10px;">Demander un nouveau mot de passe</a>
+<a href="{% url 'account:reset-password' %}" class="btn btn-outline-dark" style="margin-top: 10px;">Demander un nouveau mot de passe</a>
     </div>
 {% endblock %}

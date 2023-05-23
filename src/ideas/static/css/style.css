@@ -1,0 +1,13 @@
+body {
+  background: linear-gradient(to right, DarkSeaGreen, DarkTurquoise, PowderBlue);
+}
+
+.navbar {
+  border-radius: 20px;
+  background: linear-gradient(to right, DarkSeaGreen, DarkTurquoise, PowderBlue);
+}
+
+.card {
+    margin-top: 15px;
+    background: MintCream;
+}

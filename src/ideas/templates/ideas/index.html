@@ -18,10 +18,12 @@
 
 
 <div class="container">
+
   <div class="row">
+
      <div class="col-6">
        {% for idea in ideas %}
-    <div class="card" style="margin-top: 15px;">
+    <div class="card">
   <div class="card-header">
     {{ idea }}
   </div>
@@ -34,9 +36,11 @@
 
        {% endfor %}
     </div>
+
+
     <div class="col-6">
       {% for request_idea in request_ideas %}
-    <div class="card" style="margin-top: 15px;">
+    <div class="card">
   <div class="card-header">
     {{ request_idea }}
   </div>
