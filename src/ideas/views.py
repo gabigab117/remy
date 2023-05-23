@@ -3,8 +3,10 @@ from .models import Idea, RequestIdea
 
 
 def index(request):
-    ideas: Idea = Idea.objects.filter(status=True)
-    request_ideas: RequestIdea = RequestIdea.objects.filter(status=True)
+    count_ideas = Idea.objects.all().count()
+    ideas: Idea = Idea.objects.all()[count_ideas - 4:count_ideas]
+    count_request_ideas = RequestIdea.objects.all().count()
+    request_ideas: RequestIdea = RequestIdea.objects.all()[count_request_ideas - 4:count_request_ideas]
 
     return render(request,
                   template_name="ideas/index.html",
