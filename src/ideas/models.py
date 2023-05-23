@@ -1,8 +1,10 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 from django.core.mail import send_mail
 from accounts.models import Moderator
 from remy.settings import AUTH_USER_MODEL
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -33,6 +35,7 @@ class Idea(models.Model):
     thinker = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Utilisateur")
     details = models.TextField(verbose_name="Détails", unique=True)
     sketch = models.ImageField(upload_to="sketch_idea", verbose_name="Croquis", blank=True, null=True)
+    date = models.DateField(auto_now_add=True)
     status = models.BooleanField(verbose_name="Publié", default=False)
 
     def email_to_admin_idea(self):
@@ -55,6 +58,9 @@ class Idea(models.Model):
         self.email_to_admin_idea()
         super().save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse('ideas:idea-detail', kwargs={"slug": self.slug})
+
     class Meta:
         verbose_name = "Idée"
 
@@ -70,6 +76,7 @@ class RequestIdea(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name="Catégorie")
     thinker = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Utilisateur")
     details = models.TextField(verbose_name="Détails", unique=True)
+    date = models.DateField(auto_now_add=True)
     status = models.BooleanField(default=False, verbose_name="Publié")
 
     def email_to_admin_request(self):
@@ -91,6 +98,9 @@ class RequestIdea(models.Model):
 
         self.email_to_admin_request()
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('ideas:request-idea-detail', kwargs={"slug": self.slug})
 
     class Meta:
         verbose_name = "Demande d'idée"
