@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Formulaire de contact</title>
+
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Envoyer" class="btn btn-success">
+</form>
+</div>
+{% endblock %}

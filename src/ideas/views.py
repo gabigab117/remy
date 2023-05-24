@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.forms import model_to_dict
+from django.shortcuts import render, redirect
 from .models import Idea, RequestIdea
 from django.views.generic import DetailView
+from .forms import ContactForm
+from django.core.mail import send_mail
 
 
 def index(request):
@@ -26,4 +29,39 @@ class RequestIdeaDetail(DetailView):
 
 
 def ideas_and_request_ideas_view(request):
-    pass
+    ideas = Idea.objects.filter(status=True)
+    request_ideas = RequestIdea.objects.filter(status=True)
+
+    if request.method == "GET":
+        search = request.GET.get("search")
+        if search:
+            ideas = Idea.objects.filter(name__icontains=search)
+            request_ideas = RequestIdea.objects.filter(name__icontains=search)
+
+    return render(request, "ideas/all.html", context={'ideas': ideas, 'request_ideas': request_ideas})
+
+
+def contact_view(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+        send_mail(subject=subject,
+                  message=f"Message de {email} \n{message}",
+                  from_email=None,
+                  recipient_list=["gabrieltrouve5@yahoo.com"])
+        # recipient_list : penser à passer une liste !
+        # from_email None (va chercher dans les settings)
+        return redirect('ideas:contact-ok')
+
+    # auth verify
+    if request.user.is_authenticated:
+        form = ContactForm(initial=model_to_dict(request.user, exclude="password"))
+    else:
+        form = ContactForm()
+
+    return render(request, "ideas/contact.html", context={"form": form})
+
+
+def contact_view_ok(request):
+    return render(request, "ideas/contact-ok.html")
