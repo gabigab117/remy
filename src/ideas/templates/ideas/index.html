@@ -7,7 +7,7 @@
 
 
 {% block body %}
-<div class="container">
+<div class="container" style="margin-top: 30px; margin-bottom: 30px;">
 <h2 class="display-2">Bienvenu(e) sur Rémy Project</h2>
 <p>Les inventions, découvertes, innovations ont considérablement augmenté nos niveaux de vie depuis 2 siècles.
   Toute fois leurs impacts environnementaux n'ont pratiquement jamais été pris en compte et nous souhaitons que cela change.
@@ -57,7 +57,7 @@
   </div>
 
         <div class="d-grid gap-2">
-  <a href="" class="btn btn-primary" style="margin-top: 15px;">Accéder à toutes les idées et demandes d'idées publiées</a>
+  <a href="{% url 'ideas:all' %}" class="btn btn-primary" style="margin-top: 15px; margin-bottom: 15px;">Accéder à toutes les idées et demandes d'idées publiées</a>
 
 </div>
 
