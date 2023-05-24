@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Index</title>
+
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+	<form class="d-flex" role="search">
+		<input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Search" name="search">
+		<button class="btn btn-dark" type="submit">Search</button>
+	</form>
+</div>
+<div class="container" style="margin-bottom: 15px;">
+	<div class="row">
+		<div class="col-6">
+			<h4>Dernières Idées publiées</h4>
+			{% for idea in ideas %}
+			<div class="card">
+				<div class="card-header">
+					Le {{ idea.date }} par {{ idea.thinker.username }}
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">
+						{{ idea.name }}
+					</h5>
+					<p class="card-text">
+						{{ idea.summary }}
+					</p>
+					<a href="{% url 'ideas:idea-detail' slug=idea.slug %}" class="btn btn-primary">Voir le détail</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<div class="col-6">
+			<h4>Dernières Demandes d'Idées publiées</h4>
+			{% for request_idea in request_ideas %}
+			<div class="card">
+				<div class="card-header">
+					Le {{ request_idea.date }} par {{ request_idea.thinker.username }}
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">
+						{{ request_idea.name }}
+					</h5>
+					<p class="card-text">
+						{{ request_idea.summary }}
+					</p>
+					<a href="{% url 'ideas:request-idea-detail' slug=request_idea.slug %}" class="btn btn-primary">Voir le détail</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}
