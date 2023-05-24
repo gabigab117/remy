@@ -45,7 +45,7 @@ class Idea(models.Model):
         if not self in ideas:
             email = send_mail(subject=f"{self.thinker} a soumis {self.name}",
                               message=f"{self.thinker} a soumis une idée :\n {self.details}",
-                              from_email="gabrieltrouve5@yahoo.com",
+                              from_email=None,
                               recipient_list=[moderator.email for moderator in moderators])
             return email
 
@@ -85,7 +85,7 @@ class RequestIdea(models.Model):
         if not self in requestideas:
             email = send_mail(subject=f"{self.thinker} recherche {self.name}",
                               message=f"{self.thinker} recherche :\n {self.details}",
-                              from_email="gabrieltrouve5@yahoo.com",
+                              from_email=None,
                               recipient_list=[moderator.email for moderator in moderators])
             return email
 
