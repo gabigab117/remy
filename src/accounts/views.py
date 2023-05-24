@@ -26,8 +26,8 @@ def signup(request):
 
 
 def activate_account(request):
-    context = {}
-    return render(request, "accounts/signup-valid.html", context=context)
+    # verify email
+    return render(request, "accounts/signup-valid.html")
 
 
 def login_thinker(request):
