@@ -12,7 +12,24 @@ body {
     background: MintCream;
 }
 
+form {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.idea h1 {
+    margin-top: 100px;
+}
+
+.idea .detail {
+    margin-top: 50px;
+}
+
+.idea .published {
+    margin-top: 50px;
+}
+
 .idea {
-    border: 1px solid;
     border-radius: 30px;
+    background-image: linear-gradient(to right, AliceBlue,LightCyan);
 }
