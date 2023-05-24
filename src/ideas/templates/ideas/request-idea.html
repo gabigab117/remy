@@ -7,14 +7,18 @@
 
 
 {% block body %}
-<div class="container text-center">
-    <div class="row idea">
-    <h1>{{ request_idea.name }}</h1>
-  {{ request_idea.details }}
-</div>
-    <div class="row">
-    Publié par {{ request_idea.thinker.username }} le {{ request_idea.date }}
-    </div>
+<div class="container text-center idea">
+	<div class="row">
+		<h1>{{ request_idea.name }}</h1>
+		<div class="detail">
+			{{ request_idea.details }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="published">
+			Publié par {{ request_idea.thinker.username }} le {{ request_idea.date }}
+		</div>
+	</div>
 </div>
 
 {% endblock %}
