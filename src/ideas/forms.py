@@ -1,5 +1,7 @@
 from django import forms
 
+from .models import Idea
+
 
 class ContactForm(forms.Form):
     email = forms.EmailField(label="Email")
