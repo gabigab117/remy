@@ -5,5 +5,8 @@
 formatage en cas de modification du tel
 
 # ideas
-page avec les idées et les demandes. Si je tape un mot clé dans une recherche ça me sort les idées et les demandes d'idées
-en rapport avec ce mot clé.
+forms pour envoyer idées et demandes mais surcharger save pour l'utilisateur <br>
+commentaire <br>
+afficher photo idée + projet
+
+! ! ! penser a terminer les CreateView ! ! !
