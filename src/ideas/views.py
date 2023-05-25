@@ -1,9 +1,12 @@
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+
 from .models import Idea, RequestIdea
-from django.views.generic import DetailView
+from django.views.generic import DetailView, CreateView
 from .forms import ContactForm
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -39,6 +42,23 @@ def ideas_and_request_ideas_view(request):
             request_ideas = RequestIdea.objects.filter(name__icontains=search)
 
     return render(request, "ideas/all.html", context={'ideas': ideas, 'request_ideas': request_ideas})
+
+
+class IdeaCreateView(CreateView):
+    model = Idea
+    template_name = "ideas/create-idea.html"
+    fields = ["name", "summary", "level", "category", "details"]
+    success_url = reverse_lazy('create-idea-confirm')
+
+    def form_valid(self, form):
+        form.instance.thinker = self.request.user
+        return super().form_valid(form)
+
+
+class RequestIdeaCreateView(CreateView):
+    model = RequestIdea
+    fields = ["name", "summary", "level", "category", "details"]
+    template_name = "ideas/create-request-idea.html"
 
 
 def contact_view(request):

@@ -11,4 +11,5 @@ urlpatterns = [
     path('account/', include('accounts.urls')),
     path('verification/', include('verify_email.urls')),
     path('ideas/', include('ideas.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
+                                                                           document_root=settings.STATIC_ROOT)
