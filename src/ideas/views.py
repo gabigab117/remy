@@ -7,6 +7,7 @@ from django.views.generic import DetailView, CreateView
 from .forms import ContactForm
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def index(request):
@@ -44,15 +45,19 @@ def ideas_and_request_ideas_view(request):
     return render(request, "ideas/all.html", context={'ideas': ideas, 'request_ideas': request_ideas})
 
 
-class IdeaCreateView(CreateView):
+class IdeaCreateView(LoginRequiredMixin, CreateView):
     model = Idea
     template_name = "ideas/create-idea.html"
     fields = ["name", "summary", "level", "category", "details"]
-    success_url = reverse_lazy('create-idea-confirm')
+    success_url = reverse_lazy('ideas:create-idea-confirm')
 
     def form_valid(self, form):
         form.instance.thinker = self.request.user
         return super().form_valid(form)
+
+
+def idea_create_confirm(request):
+    return render(request, "ideas/create-idea-confirm.html")
 
 
 class RequestIdeaCreateView(CreateView):
