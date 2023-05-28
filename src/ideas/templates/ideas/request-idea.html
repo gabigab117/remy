@@ -11,8 +11,16 @@
 	<div class="row">
 		<h1>{{ request_idea.name }}</h1>
 		<div class="detail">
-			{{ request_idea.details }}
+			{{ request_idea.details|safe }}
 		</div>
+	</div>
+		<div class="row">
+
+		{% if request_idea.sketch %}
+			<p>Croquis :</p>
+		<a href="{{ request_idea.sketch.url }}" target="_blank"><img src="{{ request_idea.sketch.url }}" class="rounded mx-auto d-block" alt="croquis de {{ request_idea.name }}" style="max-width: 500px;"></a>
+		{% endif %}
+
 	</div>
 	<div class="row">
 		<div class="published">

@@ -11,8 +11,16 @@
 	<div class="row">
 		<h1>{{ idea.name }}</h1>
 		<div class="detail">
-			{{ idea.details }}
+			{{ idea.details|safe }}
 		</div>
+	</div>
+	<div class="row">
+
+		{% if idea.sketch %}
+			<p>Croquis :</p>
+		<a href="{{ idea.sketch.url }}" target="_blank"><img src="{{ idea.sketch.url }}" class="rounded mx-auto d-block" alt="croquis de {{ idea.name }}"></a>
+		{% endif %}
+
 	</div>
 	<div class="row">
 		<div class="published">

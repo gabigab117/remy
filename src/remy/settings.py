@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'accounts',
     'verify_email.apps.VerifyEmailConfig',
     'ideas',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -150,3 +151,5 @@ DEFAULT_FROM_EMAIL = 'noreply<gabrieltrouve5@yahoo.com>'
 HTML_MESSAGE_TEMPLATE = "accounts/activate/email_activation_template.html"
 SUBJECT = "Vérification de l'adresse Email (Rémy)"
 VERIFICATION_SUCCESS_TEMPLATE = "accounts/activate/verification_success.html"
+
+PAYPLUG_SK = os.getenv('PAYPLUG_SK')

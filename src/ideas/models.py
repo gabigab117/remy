@@ -4,7 +4,7 @@ from django.utils.text import slugify
 from django.core.mail import send_mail
 from accounts.models import Moderator
 from remy.settings import AUTH_USER_MODEL
-from django.utils import timezone
+from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
@@ -33,7 +33,7 @@ class Idea(models.Model):
                              max_length=1)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, verbose_name="Catégorie", null=True)
     thinker = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Utilisateur")
-    details = models.TextField(verbose_name="Détails", unique=True)
+    details = RichTextField(verbose_name="Détails", unique=True)
     sketch = models.ImageField(upload_to="sketch_idea", verbose_name="Croquis", blank=True, null=True)
     date = models.DateField(auto_now_add=True)
     status = models.BooleanField(verbose_name="Publié", default=False)
@@ -75,7 +75,8 @@ class RequestIdea(models.Model):
                              help_text="1 : rapide, 2 : moyennement développé, 3 : très développé")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name="Catégorie")
     thinker = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Utilisateur")
-    details = models.TextField(verbose_name="Détails", unique=True)
+    details = RichTextField(verbose_name="Détails", unique=True)
+    sketch = models.ImageField(blank=True, null=True, verbose_name="Croquis", upload_to="sketch_request_idea")
     date = models.DateField(auto_now_add=True)
     status = models.BooleanField(default=False, verbose_name="Publié")
 

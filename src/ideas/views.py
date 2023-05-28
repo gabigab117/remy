@@ -12,9 +12,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 def index(request):
     count_ideas = Idea.objects.filter(status=True).count()
-    ideas: Idea = Idea.objects.filter(status=True)[count_ideas - 4:count_ideas]
+    ideas: Idea = Idea.objects.filter(status=True)[count_ideas - 4:count_ideas:-1]
     count_request_ideas = RequestIdea.objects.filter(status=True).count()
-    request_ideas: RequestIdea = RequestIdea.objects.filter(status=True)[count_request_ideas - 4:count_request_ideas]
+    request_ideas: RequestIdea = RequestIdea.objects.filter(status=True)[count_request_ideas - 4:count_request_ideas:-1]
 
     return render(request,
                   template_name="ideas/index.html",
@@ -48,7 +48,7 @@ def ideas_and_request_ideas_view(request):
 class IdeaCreateView(LoginRequiredMixin, CreateView):
     model = Idea
     template_name = "ideas/create-idea.html"
-    fields = ["name", "summary", "level", "category", "details"]
+    fields = ["name", "summary", "level", "category", "details", "sketch"]
     success_url = reverse_lazy('ideas:create-idea-confirm')
 
     def form_valid(self, form):
@@ -60,10 +60,19 @@ def idea_create_confirm(request):
     return render(request, "ideas/create-idea-confirm.html")
 
 
-class RequestIdeaCreateView(CreateView):
+class RequestIdeaCreateView(LoginRequiredMixin, CreateView):
     model = RequestIdea
     fields = ["name", "summary", "level", "category", "details"]
     template_name = "ideas/create-request-idea.html"
+    success_url = reverse_lazy('ideas:create-request-idea-confirm')
+
+    def form_valid(self, form):
+        form.instance.thinker = self.request.user
+        return super().form_valid(form)
+
+
+def request_idea_confirm(request):
+    return render(request, "ideas/create-request-idea-confirm.html")
 
 
 def contact_view(request):

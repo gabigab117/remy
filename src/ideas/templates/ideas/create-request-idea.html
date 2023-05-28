@@ -8,17 +8,88 @@
 
 {% block body %}
 <div class="container">
-    <div class="row">
-        <div class="col">
+	<div class="row">
+		<div class="col">
+			<h2>Soumission d'une nouvelle demande d'idée</h2>
+			<form method="post" class="form">
+				{% csrf_token %}
+				{{ form.media }}
+				{{ form.as_p }}
+				<input type="submit" value="Poster" class="btn btn-outline-dark">
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<h3>Consignes</h3>
+			<p>
+				<a class="btn btn-primary" data-bs-toggle="collapse" href="#level1" role="button" aria-expanded="false" aria-controls="level1">Niveau 1</a>
+				<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#level2" aria-expanded="false" aria-controls="level2">Niveau 2</button>
+				<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#level3" aria-expanded="false" aria-controls="level3">Niveau 3</button>
 
-<form method="post" class="form">
-{% csrf_token %}
-    {{ form.as_p }}
-
-<input type="submit" value="Poster" class="btn btn-outline-dark">
-</form>
-                </div>
-    </div>
+			</p>
+			<div class="row">
+				<div class="col">
+					<div class="collapse multi-collapse" id="level1">
+						<div class="card card-body">
+                            <h3>Niveau 1</h3>
+							<p>
+								1/ Donne un titre à ton idée
+							</p>
+							<p>
+								2/ Décrit en 2 lignes ton idée en étant le plus clair, concis etprécis possible
+							</p>
+							<p>
+								3/ Détail ton idée en prenant en compte les avantages etinconvénients potentiels (surtout économiques, financiers,environnementaux, et si possible sociaux, politique, juridique..). Essaye d'être le plus précis possible et d'apporter des élémentschiffrés par exemple le coût des matières premières et del'autre côté les revenus (ventes produits finis potentiels..), puisles risques non économiques sur ton produit, service, procédé..,et donc en face ses avantages non économiques. Voici unexemple que j'ai fait : mettre le lien du tableau
+							</p>
+							<p>
+								4/ Réalise un ou plusieurs design de ton idée en expliquant lesmécanismes à l'œuvre pour son fonctionnement.Plus ton idée sera détaillée, mieux elle sera protégé et rémunéré.Lien Canva pour faire le design qui est simple d'utilisation etgratuit. En trouver d'autres.Donne un prix à ton idée en faisant (bénéfices - risques del'opportunité de ton idée) + (ce résultat - bénéfices - risques del'opportunité déjà existante. Tu peux faire ce graphique pourt'aider à te positionnerLe but serait d'automatiser la note et donc le prix de l'idée unefois le point placé dans le tableau grâce aux points calculé dansle tableau avantages inconvénients.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="collapse multi-collapse" id="level2">
+						<div class="card card-body">
+                            <h3>Niveau 2</h3>
+							<p>
+								1) Donne un titre à ton idée
+							</p>
+							<p>
+								2) Résume ton idée en 2 lignes en étant le plus clair concis et précis possible.
+							</p>
+							<p>
+								3) Niveau 1 + plan financier + bilan carbone au moins scope 1Plan financier exemple (méthode cout de revient, méthode du multiplicateur% d'entreprise FR × %d'entreprise intéressées par ce type de produit, ×% pournotre produit × prix = CA, méthode ventes concurrence + mettre methodeexcel gratuite pour plan financier.
+							</p>
+							<p>
+								4) faire un petit bilan carbone de l'application potentiel de l'idée mettre lien.
+							</p>
+							<p>
+								5) Faire un ou plusieurs designs de son idée (produit, service, procédé) enexpliquant les flux et mécanismes à l'œuvre pour son fonctionnement.(Essayer de détailler le plus possible, mettre lien d'un logiciel gratuit de design).
+							</p>
+							<p>
+								6) Estime le prix de ton idée avec la méthode suivante : (Bénéfices - risques) del'opportunité de l'idée (produits, services, procédés futurs de ton idée) (-)(bénéfices - risques) de l'opportunité déjà existante = note à débattre aprèsvérification par demandeurs et offreurs une fois l'idée soumise.(Reprendre les bénéfices risques de la question 3 et attribuer la note)
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="collapse multi-collapse" id="level3">
+						<div class="card card-body">
+                            <h3>Niveau 3</h3>
+							<p>
+								= niveau 2 + Nouveauté de l'idée : verifier par motclé dans la littérature scientifique si l'idée existedéjà (possibilité d'utiliser chat gpt et faire une mindmap pour repérer les différences de son idée +expérience quantitative et/ou qualitative + méthode employéeet interprétation des résultats.
+							</p>
+							<p>
+								Ici possibilité de breveter, pour les expériencesutiliser des questionnaires Google Sheet, faire destests avec un pmv qui peut être un simple dessin,une maquette, un site vitrine. Tester au moins sur30 personnes en quali et 200 en quanti, mettre desliens pour les expériences.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+
 
 {% endblock %}
