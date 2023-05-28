@@ -1,7 +1,6 @@
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-
+from django.urls import reverse_lazy, reverse
 from .models import Idea, RequestIdea
 from django.views.generic import DetailView, CreateView
 from .forms import ContactForm
