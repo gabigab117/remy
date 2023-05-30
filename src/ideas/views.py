@@ -76,22 +76,24 @@ def request_idea_confirm(request):
 
 def contact_view(request):
     if request.method == "POST":
-        email = request.POST.get("email")
-        subject = request.POST.get("subject")
-        message = request.POST.get("message")
-        send_mail(subject=subject,
-                  message=f"Message de {email} \n{message}",
-                  from_email=None,
-                  recipient_list=["gabrieltrouve5@yahoo.com"])
-        # recipient_list : penser à passer une liste !
-        # from_email None (va chercher dans les settings)
-        return redirect('ideas:contact-ok')
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            subject = form.cleaned_data["subject"]
+            message = form.cleaned_data["message"]
+            send_mail(subject=subject,
+                      message=f"Message de {email} \n{message}",
+                      from_email=None,
+                      recipient_list=["gabrieltrouve5@yahoo.com"])
+            # recipient_list : penser à passer une liste !
+            # from_email None (va chercher dans les settings)
+            return redirect('ideas:contact-ok')
 
-    # auth verify
-    if request.user.is_authenticated:
-        form = ContactForm(initial=model_to_dict(request.user, exclude="password"))
     else:
-        form = ContactForm()
+        if request.user.is_authenticated:
+            form = ContactForm(initial=model_to_dict(request.user, exclude="password"))
+        else:
+            form = ContactForm()
 
     return render(request, "ideas/contact.html", context={"form": form})
 

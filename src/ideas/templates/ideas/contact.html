@@ -11,6 +11,11 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+    {% if form.errors %}
+    {% for message in forms.errors.values %}
+    {{ message }}
+    {% endfor %}
+    {% endif %}
     <input type="submit" value="Envoyer" class="btn btn-success">
 </form>
 </div>

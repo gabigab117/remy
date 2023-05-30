@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'verify_email.apps.VerifyEmailConfig',
     'ideas',
     'ckeditor',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,8 @@ DEFAULT_FROM_EMAIL = 'noreply<gabrieltrouve5@yahoo.com>'
 HTML_MESSAGE_TEMPLATE = "accounts/activate/email_activation_template.html"
 SUBJECT = "Vérification de l'adresse Email (Rémy)"
 VERIFICATION_SUCCESS_TEMPLATE = "accounts/activate/verification_success.html"
+
+
+# Google recaptcha
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')

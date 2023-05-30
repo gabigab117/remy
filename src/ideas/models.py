@@ -105,3 +105,20 @@ class RequestIdea(models.Model):
 
     class Meta:
         verbose_name = "Demande d'idée"
+
+# class ConversationIdea(models.Model):
+#     thinker1 = models.ForeignKey(AUTH_USER_MODEL, verbose_name="Utilisateur 1",
+#                                  on_delete=models.CASCADE, related_name="conversation")
+#     thinker2 = models.ForeignKey(AUTH_USER_MODEL, verbose_name="Utilisateur 2",
+#                                  on_delete=models.CASCADE, related_name="conversation")
+#     idea = models.ForeignKey(Idea, verbose_name="Idée", on_delete=models.CASCADE, related_name="idea")
+#
+#
+# class IdeaComment(models.Model):
+#     message = RichTextField(verbose_name="Message")
+#     thinker = models.ForeignKey(AUTH_USER_MODEL,
+#                                 verbose_name="Utilisateur",
+#                                 on_delete=models.CASCADE,
+#                                 related_name="comment")
+#     conversation = models.ForeignKey(ConversationIdea, on_delete=models.CASCADE, related_name="conversationidea")
+#     date = models.DateTimeField(verbose_name="Date de publication", auto_now_add=True)
