@@ -83,6 +83,7 @@ class RequestIdea(models.Model):
     def email_to_admin_request(self):
         moderators: Moderator = Moderator.objects.all()
         requestideas = RequestIdea.objects.all()
+
         if not self in requestideas:
             email = send_mail(subject=f"{self.thinker} recherche {self.name}",
                               message=f"{self.thinker} recherche :\n {self.details}",
@@ -106,19 +107,22 @@ class RequestIdea(models.Model):
     class Meta:
         verbose_name = "Demande d'idée"
 
-# class ConversationIdea(models.Model):
-#     thinker1 = models.ForeignKey(AUTH_USER_MODEL, verbose_name="Utilisateur 1",
-#                                  on_delete=models.CASCADE, related_name="conversation")
-#     thinker2 = models.ForeignKey(AUTH_USER_MODEL, verbose_name="Utilisateur 2",
-#                                  on_delete=models.CASCADE, related_name="conversation")
-#     idea = models.ForeignKey(Idea, verbose_name="Idée", on_delete=models.CASCADE, related_name="idea")
-#
-#
-# class IdeaComment(models.Model):
-#     message = RichTextField(verbose_name="Message")
-#     thinker = models.ForeignKey(AUTH_USER_MODEL,
-#                                 verbose_name="Utilisateur",
-#                                 on_delete=models.CASCADE,
-#                                 related_name="comment")
-#     conversation = models.ForeignKey(ConversationIdea, on_delete=models.CASCADE, related_name="conversationidea")
-#     date = models.DateTimeField(verbose_name="Date de publication", auto_now_add=True)
+
+class IdeaComment(models.Model):
+    content = RichTextField(verbose_name="Message")
+    idea = models.ForeignKey(Idea, on_delete=models.CASCADE, verbose_name="idée")
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="utilisateur")
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.date} - {self.idea}"
+
+    class Meta:
+        verbose_name = "Commentaires idée"
+
+
+class RequestIdeaComment(models.Model):
+    content = models.TextField()
+    request_idea = models.ForeignKey(RequestIdea, on_delete=models.CASCADE)
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)

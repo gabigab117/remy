@@ -1,9 +1,9 @@
 from django.forms import model_to_dict
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from .models import Idea, RequestIdea
+from .models import Idea, RequestIdea, IdeaComment
 from django.views.generic import DetailView, CreateView
-from .forms import ContactForm
+from .forms import ContactForm, IdeaCommentForm
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -20,9 +20,24 @@ def index(request):
                   context={"ideas": ideas, "request_ideas": request_ideas})
 
 
-class IdeaDetail(DetailView):
-    model = Idea
-    template_name = "ideas/idea.html"
+# vue détaille modele Idea
+def idea_detail_view(request, slug):
+    user = request.user
+    idea = get_object_or_404(Idea, slug=slug)
+    comments = IdeaComment.objects.filter(idea=idea).order_by('date')
+
+    if request.method == "POST":
+        form = IdeaCommentForm(request.POST)
+        if form.is_valid():
+            form.instance.user = user
+            form.instance.idea = idea
+            form.save()
+            return redirect(idea)
+    else:
+        form = IdeaCommentForm()
+
+    return render(request, "ideas/idea.html", context={"idea": idea, "form": form,
+                                                       "comments": comments})
 
 
 class RequestIdeaDetail(DetailView):

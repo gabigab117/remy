@@ -29,4 +29,37 @@
 	</div>
 </div>
 
+
+<div class="container text-center">
+	{% for comment in comments %}
+<div class="card">
+  <div class="card-header">
+	  {{ comment.user.username }} - {{ comment.date }}
+  </div>
+  <div class="card-body">
+
+    <p class="card-text">{{ comment.content|safe }}</p>
+
+  </div>
+</div>
+{% endfor %}
+</div>
+
+
+
+<div class="container text-center" style="margin-top: 50px;">
+	<div class="row">
+<form method="post">
+    {% csrf_token %}
+	{{ form.media }}
+    {{ form.as_p }}
+    <input type="submit" value="Envoyer" class="btn btn-success">
+</form>
+
+	</div>
+
+
+
+</div>
+
 {% endblock %}
