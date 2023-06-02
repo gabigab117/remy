@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Idea, RequestIdea, IdeaComment
+from .models import Category, Idea, RequestIdea, Comment
 
 admin.site.register(Category)
 
@@ -22,7 +22,8 @@ class RequestIdeaAdmin(admin.ModelAdmin):
     list_filter = ("status", "category", )
 
 
-@admin.register(IdeaComment)
+@admin.register(Comment)
 class IdeaCommentAdmin(admin.ModelAdmin):
-    list_display = ("idea", "user", "date")
+    list_display = ("idea", "request_idea", "user", "date")
+    list_display_links = ("date", )
     search_fields = ("user", )

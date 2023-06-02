@@ -108,21 +108,17 @@ class RequestIdea(models.Model):
         verbose_name = "Demande d'idée"
 
 
-class IdeaComment(models.Model):
+class Comment(models.Model):
     content = RichTextField(verbose_name="Message")
     idea = models.ForeignKey(Idea, on_delete=models.CASCADE, verbose_name="idée")
-    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="utilisateur")
+    request_idea = models.ForeignKey(RequestIdea, on_delete=models.CASCADE, verbose_name="Demande d'idée",
+                                     blank=True, null=True)
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="utilisateur",
+                             blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user} - {self.date} - {self.idea}"
 
     class Meta:
-        verbose_name = "Commentaires idée"
-
-
-class RequestIdeaComment(models.Model):
-    content = models.TextField()
-    request_idea = models.ForeignKey(RequestIdea, on_delete=models.CASCADE)
-    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
+        verbose_name = "Commentaire"

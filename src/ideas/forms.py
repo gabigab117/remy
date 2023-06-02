@@ -1,7 +1,7 @@
 from django import forms
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
-from .models import IdeaComment
+from .models import Comment
 
 
 class ContactForm(forms.Form):
@@ -15,5 +15,5 @@ class IdeaCommentForm(forms.ModelForm):
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
 
     class Meta:
-        model = IdeaComment
+        model = Comment
         fields = ["content"]

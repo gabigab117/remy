@@ -1,7 +1,7 @@
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from .models import Idea, RequestIdea, IdeaComment
+from .models import Idea, RequestIdea, Comment
 from django.views.generic import DetailView, CreateView
 from .forms import ContactForm, IdeaCommentForm
 from django.core.mail import send_mail
@@ -24,7 +24,7 @@ def index(request):
 def idea_detail_view(request, slug):
     user = request.user
     idea = get_object_or_404(Idea, slug=slug)
-    comments = IdeaComment.objects.filter(idea=idea).order_by('date')
+    comments = Comment.objects.filter(idea=idea).order_by('date')
 
     if request.method == "POST":
         form = IdeaCommentForm(request.POST)
