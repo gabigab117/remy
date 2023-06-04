@@ -48,7 +48,7 @@
 					<p class="card-text">
 						{{ request_idea.summary }}
 					</p>
-					<a href="{% url 'ideas:request-idea-detail' slug=request_idea.slug %}" class="btn btn-primary">Voir le détail</a>
+					<a href="{% url 'ideas:idea-detail' slug=request_idea.slug %}" class="btn btn-primary">Voir le détail</a>
 				</div>
 			</div>
 			{% endfor %}

@@ -1,7 +1,7 @@
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from .models import Idea, RequestIdea, Comment
+from .models import Idea, Comment
 from django.views.generic import DetailView, CreateView
 from .forms import ContactForm, IdeaCommentForm
 from django.core.mail import send_mail
@@ -10,17 +10,29 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def index(request):
-    count_ideas = Idea.objects.filter(status=True).count()
-    ideas: Idea = Idea.objects.filter(status=True)[count_ideas - 4:count_ideas:-1]
-    count_request_ideas = RequestIdea.objects.filter(status=True).count()
-    request_ideas: RequestIdea = RequestIdea.objects.filter(status=True)[count_request_ideas - 4:count_request_ideas:-1]
+    context = {}
+
+    count_ideas = Idea.objects.filter(status=True, paid=False, request=False).count()
+    if count_ideas >= 4:
+        context["ideas"]: Idea = Idea.objects.filter(status=True,
+                                                     paid=False, request=False)[count_ideas - 4:count_ideas][::-1]
+    else:
+        context["ideas"]: Idea = Idea.objects.filter(status=True, paid=False, request=False)
+
+    count_request_ideas = Idea.objects.filter(status=True, request=True, paid=False).count()
+    if count_request_ideas >= 4:
+        context["request_ideas"]: Idea = \
+            Idea.objects.filter(status=True,
+                                request=True, paid=False)[count_request_ideas - 4:count_request_ideas][::-1]
+    else:
+        context["request_ideas"]: Idea = Idea.objects.filter(status=True, request=True, paid=False)
 
     return render(request,
                   template_name="ideas/index.html",
-                  context={"ideas": ideas, "request_ideas": request_ideas})
+                  context=context)
 
 
-# vue détaille modele Idea
+@login_required()
 def idea_detail_view(request, slug):
     user = request.user
     idea = get_object_or_404(Idea, slug=slug)
@@ -40,21 +52,15 @@ def idea_detail_view(request, slug):
                                                        "comments": comments})
 
 
-class RequestIdeaDetail(DetailView):
-    model = RequestIdea
-    template_name = "ideas/request-idea.html"
-    context_object_name = "request_idea"
-
-
 def ideas_and_request_ideas_view(request):
-    ideas = Idea.objects.filter(status=True)
-    request_ideas = RequestIdea.objects.filter(status=True)
+    ideas = Idea.objects.filter(status=True, paid=False, request=False)
+    request_ideas = Idea.objects.filter(status=True, paid=False, request=True)
 
     if request.method == "GET":
         search = request.GET.get("search")
         if search:
-            ideas = Idea.objects.filter(name__icontains=search)
-            request_ideas = RequestIdea.objects.filter(name__icontains=search)
+            ideas = Idea.objects.filter(name__icontains=search, status=True, paid=False, request=False)
+            request_ideas = Idea.objects.filter(name__icontains=search, status=True, paid=False, request=True)
 
     return render(request, "ideas/all.html", context={'ideas': ideas, 'request_ideas': request_ideas})
 
@@ -75,13 +81,14 @@ def idea_create_confirm(request):
 
 
 class RequestIdeaCreateView(LoginRequiredMixin, CreateView):
-    model = RequestIdea
-    fields = ["name", "summary", "level", "category", "details"]
+    model = Idea
+    fields = ["name", "summary", "level", "category", "details", "sketch"]
     template_name = "ideas/create-request-idea.html"
     success_url = reverse_lazy('ideas:create-request-idea-confirm')
 
     def form_valid(self, form):
         form.instance.thinker = self.request.user
+        form.instance.request = True
         return super().form_valid(form)
 
 
