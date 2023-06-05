@@ -1,13 +1,15 @@
 from django.contrib import admin
-from .models import Category, Idea, Comment
+from .models import Category, Idea, Comment, Cart
 
 admin.site.register(Category)
+admin.site.register(Cart)
 
 
 @admin.register(Idea)
 class IdeaAdmin(admin.ModelAdmin):
-    list_display = ("name", "summary", "level", "category", "thinker", "date", "status", "request", "paid", )
-    list_editable = ("status", "request", "paid", )
+    list_display = ("name", "summary", "level", "category",
+                    "thinker", "date", "status", "request", "paid", "price", "buyer", )
+    list_editable = ("status", "request", "paid", "price" )
     list_display_links = ("name", )
     search_fields = ("name", "details", "summary", )
     list_filter = ("status", "category", "paid", "request", )

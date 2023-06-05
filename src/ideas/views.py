@@ -1,8 +1,8 @@
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from .models import Idea, Comment
-from django.views.generic import DetailView, CreateView
+from .models import Idea, Comment, Cart
+from django.views.generic import CreateView
 from .forms import ContactForm, IdeaCommentForm
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
@@ -27,9 +27,7 @@ def index(request):
     else:
         context["request_ideas"]: Idea = Idea.objects.filter(status=True, request=True, paid=False)
 
-    return render(request,
-                  template_name="ideas/index.html",
-                  context=context)
+    return render(request, template_name="ideas/index.html", context=context)
 
 
 @login_required()
@@ -50,6 +48,21 @@ def idea_detail_view(request, slug):
 
     return render(request, "ideas/idea.html", context={"idea": idea, "form": form,
                                                        "comments": comments})
+
+
+def add_to_cart(request, slug):
+    user = request.user
+
+    cart, _ = Cart.objects.get_or_create(buyer=user)
+    idea = get_object_or_404(Idea, slug=slug)
+
+    if idea in cart.ideas:
+        # on ne peut pas ajouter deux fois la même idée
+        return redirect("")
+    else:
+        cart.ideas.add(idea)
+        # on ajoute au panier et on va dans la vue panier
+        return redirect("")
 
 
 def ideas_and_request_ideas_view(request):
@@ -106,7 +119,7 @@ def contact_view(request):
             send_mail(subject=subject,
                       message=f"Message de {email} \n{message}",
                       from_email=None,
-                      recipient_list=["gabrieltrouve5@yahoo.com"])
+                      recipient_list=["remysevestre@yahoo.com"])
             # recipient_list : penser à passer une liste !
             # from_email None (va chercher dans les settings)
             return redirect('ideas:contact-ok')

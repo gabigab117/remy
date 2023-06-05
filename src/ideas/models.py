@@ -28,19 +28,24 @@ class Idea(models.Model):
     slug = models.SlugField(blank=True, unique=True)
     summary = models.CharField(max_length=1000, verbose_name="Résumé")
     level = models.CharField(choices=[(str(i), str(i)) for i in range(1, 4)],
-                             verbose_name="Niveau",
                              help_text="1 : rapide, 2 : moyennement développé, 3 : très développé",
-                             max_length=1)
+                             max_length=1,
+                             verbose_name="Niveau",)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, verbose_name="Catégorie", null=True)
-    thinker = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Utilisateur")
-    details = RichTextField(verbose_name="Détails", unique=True)
-    sketch = models.ImageField(upload_to="sketch_idea", verbose_name="Croquis", blank=True, null=True)
+    thinker = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE,
+                                verbose_name="Utilisateur", related_name="user_thinker")
+    details = RichTextField(unique=True, verbose_name="Détails")
+    sketch = models.ImageField(upload_to="sketch_idea", blank=True, null=True, verbose_name="Croquis")
     date = models.DateField(auto_now_add=True)
     request = models.BooleanField(default=False, verbose_name="Demande d'idée",
                                   help_text="Cocher si c'est une demande d'idée,"
                                             " si c'est une idée (offre) ne pas cocher")
     status = models.BooleanField(default=False, verbose_name="Publié")
+    price = models.FloatField(default=0, verbose_name="Prix")
     paid = models.BooleanField(default=False, verbose_name="Payé")
+    buyer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE,
+                              verbose_name="Acheteur", null=True, related_name="user_buyer")
+    ordered_date = models.DateField(verbose_name="Date d'achat", null=True)
 
     def email_to_admin_idea(self):
         moderators: Moderator = Moderator.objects.all()
@@ -80,3 +85,18 @@ class Comment(models.Model):
 
     class Meta:
         verbose_name = "Commentaire"
+
+
+class Cart(models.Model):
+    buyer = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Acheteur")
+    ideas = models.ManyToManyField(Idea, verbose_name="Idées")
+
+    def total_cart(self):
+        total = 0
+        for idea in self.ideas:
+            total += idea.price
+
+        return total
+
+    class Meta:
+        verbose_name = "Panier"
