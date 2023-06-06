@@ -7,6 +7,7 @@ from .forms import ContactForm, IdeaCommentForm
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 
 def index(request):
@@ -56,13 +57,24 @@ def add_to_cart(request, slug):
     cart, _ = Cart.objects.get_or_create(buyer=user)
     idea = get_object_or_404(Idea, slug=slug)
 
-    if idea in cart.ideas:
+    if idea in cart.ideas.all():
         # on ne peut pas ajouter deux fois la même idée
-        return redirect("")
+        messages.add_message(request, messages.ERROR, "L'idée est déjà dans le panier")
+        return redirect("ideas:all")
     else:
         cart.ideas.add(idea)
         # on ajoute au panier et on va dans la vue panier
-        return redirect("")
+        return redirect("ideas:cart")
+
+
+@login_required()
+def cart(request):
+    context = {}
+    user = request.user
+
+    context["cart"] = user.cart
+
+    return render(request, "ideas/cart.html", context=context)
 
 
 def ideas_and_request_ideas_view(request):

@@ -17,8 +17,8 @@ form {
     margin-bottom: 30px;
 }
 
-.idea h1 {
-    margin-top: 100px;
+.idea {
+    margin-top: 50px;
 }
 
 .idea .detail {
@@ -32,4 +32,8 @@ form {
 .idea {
     border-radius: 30px;
     background-image: linear-gradient(to right, AliceBlue,LightCyan);
+}
+
+.buy {
+    margin-top: 50px;
 }

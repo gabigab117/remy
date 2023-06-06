@@ -7,6 +7,13 @@
 
 
 {% block body %}
+{% if request.user.is_authenticated %}
+<div class="container text-center buy">
+<a href="{% url 'ideas:add-to-cart' slug=idea.slug %}" class="btn btn-success">Acheter l'idée</a>
+	<h4>Prix : {{ idea.price }} €</h4>
+</div>
+{% endif %}
+
 <div class="container text-center idea">
 	<div class="row">
 		<h1>{{ idea.name }}</h1>
@@ -25,7 +32,7 @@
 	<div class="row">
 		<div class="published">
 			<i>Publié par {{ idea.thinker.username }} le {{ idea.date }}</i><br>
-			<h5>Prix : {{ idea.price }} €</h5>
+
 		</div>
 	</div>
 </div>

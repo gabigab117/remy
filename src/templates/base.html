@@ -22,7 +22,7 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
 
-          {% if not user.is_authenticated %}
+          {% if not request.user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'account:signup' %}">Inscription</a>
         </li>
@@ -33,6 +33,11 @@
           <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'account:logout' %}">Déconnexion</a>
         </li>
+        {% if request.user.cart %}
+         <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'ideas:cart' %}">Panier</a>
+        </li>
+        {% endif %}
           <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'account:profile' %}">Mon profile</a>
         </li>

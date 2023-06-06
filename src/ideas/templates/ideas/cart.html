@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Panier</title>
+
+{% endblock %}
+
+
+{% block body %}
+
+
+
+<div class="container">
+<div class="row">
+    <p>Votre panier <b>{{ cart.buyer.username }}</b></p>
+</div>
+    {% for idea in cart.ideas.all %}
+  <div class="row">
+
+<div class="card" style="width: 18rem;">
+
+    <ul class="list-group list-group-flush">
+
+    <li class="list-group-item">Idée "{{ idea.name }}" <br>de {{ idea.thinker }}<br>{{ idea.price }} €</li>
+  </ul>
+    <a href="" class="btn btn-danger" style="margin-bottom: 10px;">Supprimer</a>
+</div>
+  </div>
+
+    {% endfor %}
+<div class="row">
+
+    <b>Total du panier : {{ cart.total_cart }}</b>
+
+</div>
+</div>
+
+{% endblock %}

@@ -33,7 +33,7 @@ class Idea(models.Model):
                              verbose_name="Niveau",)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, verbose_name="Catégorie", null=True)
     thinker = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                verbose_name="Utilisateur", related_name="user_thinker")
+                                verbose_name="Utilisateur", related_name="ideas")
     details = RichTextField(unique=True, verbose_name="Détails")
     sketch = models.ImageField(upload_to="sketch_idea", blank=True, null=True, verbose_name="Croquis")
     date = models.DateField(auto_now_add=True)
@@ -44,7 +44,7 @@ class Idea(models.Model):
     price = models.FloatField(default=0, verbose_name="Prix")
     paid = models.BooleanField(default=False, verbose_name="Payé")
     buyer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE,
-                              verbose_name="Acheteur", null=True, related_name="user_buyer")
+                              verbose_name="Acheteur", null=True, related_name="purchases")
     ordered_date = models.DateField(verbose_name="Date d'achat", null=True)
 
     def email_to_admin_idea(self):
@@ -93,10 +93,13 @@ class Cart(models.Model):
 
     def total_cart(self):
         total = 0
-        for idea in self.ideas:
+        for idea in self.ideas.all():
             total += idea.price
 
         return total
 
     class Meta:
         verbose_name = "Panier"
+
+    def __str__(self):
+        return f"Panier de {self.buyer}"

@@ -6,7 +6,7 @@ from django import forms
 class ThinkerCreationForm(UserCreationForm):
     class Meta:
         model = get_user_model()
-        fields = ["email", "username", "first_name", "last_name", "phone", "company", "country", "pic"]
+        fields = ["email", "username", "first_name", "last_name", "phone", "company", "country"]
 
 
 class ThinkerProfilForm(forms.ModelForm):
