@@ -89,6 +89,10 @@ def delete_from_cart(request, pk):
     return redirect("ideas:cart")
 
 
+def create_checkout_session(request):
+    pass
+
+
 def ideas_and_request_ideas_view(request):
     ideas = Idea.objects.filter(status=True, paid=False, request=False)
     request_ideas = Idea.objects.filter(status=True, paid=False, request=True)
@@ -159,3 +163,4 @@ def contact_view(request):
 
 def contact_view_ok(request):
     return render(request, "ideas/contact-ok.html")
+

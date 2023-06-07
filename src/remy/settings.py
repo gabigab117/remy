@@ -157,3 +157,6 @@ VERIFICATION_SUCCESS_TEMPLATE = "accounts/activate/verification_success.html"
 # Google recaptcha
 RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
+
+# stripe
+STRIPE_KEY = os.getenv('STRIPE_KEY')

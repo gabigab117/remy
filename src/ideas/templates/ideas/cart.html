@@ -31,7 +31,13 @@
 <div class="row">
 
     <b>Total du panier : {{ cart.total_cart }}</b>
+<div class="row">
+<form action="{% url 'ideas:create-checkout-session' %}" method="post">
+<button type="submit">Procéder au paiement</button>
 
+</form>
+
+</div>
 </div>
 </div>
 
