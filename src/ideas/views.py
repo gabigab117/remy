@@ -77,6 +77,18 @@ def cart(request):
     return render(request, "ideas/cart.html", context=context)
 
 
+def delete_from_cart(request, pk):
+    user = request.user
+    cart = user.cart
+    idea = cart.ideas.get(pk=pk)
+    cart.ideas.remove(idea)
+    if cart.ideas.count() == 0:
+        cart.delete()
+        # voir pour utiliser messages "Plus rien dans le panier"
+        return redirect("index")
+    return redirect("ideas:cart")
+
+
 def ideas_and_request_ideas_view(request):
     ideas = Idea.objects.filter(status=True, paid=False, request=False)
     request_ideas = Idea.objects.filter(status=True, paid=False, request=True)

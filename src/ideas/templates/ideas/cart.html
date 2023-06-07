@@ -23,7 +23,7 @@
 
     <li class="list-group-item">Idée "{{ idea.name }}" <br>de {{ idea.thinker }}<br>{{ idea.price }} €</li>
   </ul>
-    <a href="" class="btn btn-danger" style="margin-bottom: 10px;">Supprimer</a>
+    <a href="{% url 'ideas:delete-from-cart' pk=idea.pk %}" class="btn btn-danger" style="margin-bottom: 10px;">Supprimer</a>
 </div>
   </div>
 
