@@ -1,6 +1,13 @@
+import json
+import os
+
+import stripe
 from django.forms import model_to_dict
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import Idea, Comment, Cart
 from django.views.generic import CreateView
 from .forms import ContactForm, IdeaCommentForm
@@ -8,6 +15,10 @@ from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from remy.settings import STRIPE_KEY
+
+
+stripe.api_key = STRIPE_KEY
 
 
 def index(request):
@@ -81,16 +92,68 @@ def delete_from_cart(request, pk):
     user = request.user
     cart = user.cart
     idea = cart.ideas.get(pk=pk)
-    cart.ideas.remove(idea)
-    if cart.ideas.count() == 0:
-        cart.delete()
-        # voir pour utiliser messages "Plus rien dans le panier"
-        return redirect("index")
+
+    if request.method == "POST":
+        cart.ideas.remove(idea)
+        if not cart.ideas.all():
+            cart.delete()
+            # voir pour utiliser messages "Plus rien dans le panier"
+            return redirect("index")
     return redirect("ideas:cart")
 
 
 def create_checkout_session(request):
-    pass
+    cart = request.user.cart
+
+    session = stripe.checkout.Session.create(
+        locale="fr",
+        line_items=[{
+            'price_data': {
+                'currency': 'eur',
+                'product_data': {
+                    'name': idea.name,
+                },
+                'unit_amount': int(idea.price * 100),
+            },
+            'quantity': 1,
+        } for idea in cart.ideas.all()],
+        mode='payment',
+        customer_email=request.user.email,
+        billing_address_collection="",
+        success_url=request.build_absolute_uri(reverse("ideas:checkout-success")),
+        cancel_url='http://127.0.0.1:8000',
+    )
+
+    return redirect(session.url, code=303)
+
+
+def checkout_success(request):
+    return render(request, 'ideas/success-payment.html')
+
+
+@csrf_exempt
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    endpoint_secret = os.getenv('endpoint_secret')
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    # Handle the event
+    if event.type == 'checkout.session.completed':
+        print(event['data'])
+
+    return HttpResponse(status=200)
 
 
 def ideas_and_request_ideas_view(request):
