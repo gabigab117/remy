@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
 
+from accounts.models import ShippingAddresse, Thinker
 from .models import Idea, Comment, Cart
 from django.views.generic import CreateView
 from .forms import ContactForm, IdeaCommentForm
@@ -68,14 +69,16 @@ def add_to_cart(request, slug):
     cart, _ = Cart.objects.get_or_create(buyer=user)
     idea = get_object_or_404(Idea, slug=slug)
 
-    if idea in cart.ideas.all():
-        # on ne peut pas ajouter deux fois la même idée
-        messages.add_message(request, messages.ERROR, "L'idée est déjà dans le panier")
-        return redirect("ideas:all")
-    else:
-        cart.ideas.add(idea)
-        # on ajoute au panier et on va dans la vue panier
-        return redirect("ideas:cart")
+    if request.method == "POST":
+
+        if idea in cart.ideas.all():
+            # on ne peut pas ajouter deux fois la même idée
+            messages.add_message(request, messages.ERROR, "L'idée est déjà dans le panier")
+            return redirect("ideas:all")
+        else:
+            cart.ideas.add(idea)
+            # on ajoute au panier et on va dans la vue panier
+            return redirect("ideas:cart")
 
 
 @login_required()
@@ -105,9 +108,9 @@ def delete_from_cart(request, pk):
 def create_checkout_session(request):
     cart = request.user.cart
 
-    session = stripe.checkout.Session.create(
-        locale="fr",
-        line_items=[{
+    checkout_data = {
+        "locale": "fr",
+        "line_items": [{
             'price_data': {
                 'currency': 'eur',
                 'product_data': {
@@ -117,12 +120,20 @@ def create_checkout_session(request):
             },
             'quantity': 1,
         } for idea in cart.ideas.all()],
-        mode='payment',
-        customer_email=request.user.email,
-        billing_address_collection="",
-        success_url=request.build_absolute_uri(reverse("ideas:checkout-success")),
-        cancel_url='http://127.0.0.1:8000',
-    )
+        "automatic_tax": {'enabled': True},
+        "mode": 'payment',
+        "shipping_address_collection": {"allowed_countries": ["FR", "BE"]},
+        "success_url": request.build_absolute_uri(reverse("ideas:checkout-success")),
+        "cancel_url": 'http://127.0.0.1:8000'}
+
+    if request.user.stripe_id:
+        checkout_data["customer"] = request.user.stripe_id
+        checkout_data["customer_update"] = {"shipping": "auto"}
+    else:
+        checkout_data["customer_email"] = request.user.email
+        checkout_data["customer_creation"] = "always"
+
+    session = stripe.checkout.Session.create(**checkout_data)
 
     return redirect(session.url, code=303)
 
@@ -151,7 +162,21 @@ def stripe_webhook(request):
 
     # Handle the event
     if event.type == 'checkout.session.completed':
-        print(event['data'])
+        data = event['data']['object']
+
+        user = get_object_or_404(Thinker, email=data['customer_details']['email'])
+        user.stripe_id = data["customer"]
+        user.save()
+
+        ShippingAddresse.objects.get_or_create(
+            thinker=user,
+            name=data["shipping_details"]["name"],
+            city=data["shipping_details"]["address"]["city"],
+            country=data["shipping_details"]["address"]["country"],
+            line1=data["shipping_details"]["address"]["line1"],
+            line2=data["shipping_details"]["address"]["line2"] or "",
+            zip_code=data["shipping_details"]["address"]["postal_code"],
+        )
 
     return HttpResponse(status=200)
 

@@ -9,7 +9,10 @@
 {% block body %}
 {% if request.user.is_authenticated %}
 <div class="container text-center buy">
-<a href="{% url 'ideas:add-to-cart' slug=idea.slug %}" class="btn btn-success">Acheter l'idée</a>
+	<form method="post" action="{% url 'ideas:add-to-cart' slug=idea.slug %}">
+		{% csrf_token %}
+<input type="submit" value="Acheter l'idée">
+	</form>
 	<h4>Prix : {{ idea.price }} €</h4>
 </div>
 {% endif %}

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from remy.settings import AUTH_USER_MODEL
 import countryphonelist
 
 
@@ -32,6 +33,7 @@ class Thinker(AbstractUser):
     email = models.EmailField(unique=True)
     company = models.CharField(max_length=500, blank=True, verbose_name="Entreprise")
     country = models.CharField(max_length=100, choices=countryphonelist.COUNTRY, verbose_name="Pays")
+    stripe_id = models.CharField(max_length=500)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username", "phone", 'first_name', 'last_name', 'country']
@@ -60,3 +62,20 @@ class Moderator(models.Model):
 
     class Meta:
         verbose_name = "Modérateur"
+
+
+class ShippingAddresse(models.Model):
+    thinker = models.ForeignKey(AUTH_USER_MODEL, models.CASCADE, related_name="addresses")
+    name = models.CharField(max_length=100, verbose_name="Nom de l'adresse")
+    line1 = models.CharField(max_length=500, verbose_name="Adresse")
+    line2 = models.CharField(max_length=200, verbose_name="Adresse / Complément",
+                             help_text="Num d'appt etc...", default="")
+    zip_code = models.CharField(max_length=10, verbose_name="Code postal")
+    city = models.CharField(max_length=100, verbose_name="Ville")
+    country = models.CharField(max_length=100, verbose_name="Pays")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Adresse"
