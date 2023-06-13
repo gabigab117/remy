@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from django.core.mail import send_mail
+from django.utils import timezone
 from accounts.models import Moderator
 from remy.settings import AUTH_USER_MODEL
 from ckeditor.fields import RichTextField
@@ -44,8 +45,8 @@ class Idea(models.Model):
     price = models.FloatField(default=0, verbose_name="Prix")
     paid = models.BooleanField(default=False, verbose_name="Payé")
     buyer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE,
-                              verbose_name="Acheteur", null=True, related_name="purchases")
-    ordered_date = models.DateField(verbose_name="Date d'achat", null=True)
+                              verbose_name="Acheteur", null=True, related_name="purchases", blank=True)
+    ordered_date = models.DateField(verbose_name="Date d'achat", null=True, blank=True)
 
     def email_to_admin_idea(self):
         moderators: Moderator = Moderator.objects.all()
@@ -97,6 +98,16 @@ class Cart(models.Model):
             total += idea.price
 
         return total
+
+    def cart_paid(self, user):
+        for idea in self.ideas.all():
+            idea.paid = True
+            idea.buyer = user
+            idea.ordered_date = timezone.now()
+            idea.save()
+
+        self.ideas.clear()
+        self.delete()
 
     class Meta:
         verbose_name = "Panier"

@@ -1,5 +1,9 @@
 # a faire
-si une idée est payé, visible que par celui qui a payé
+si dans un panier ne pas l'afficher
+ou au moment du paiement si idée achetée quand on paye ça bloque, nouveau webhook ?
+
+Espace perso où idées achetées. Que l'auteur puisse commenter avec l'acheteur. 
+Un espace avec mes idées où j'y ai tjs accès et je peux discuter avec l'acheteur
 
 # idée en plus
 Import / Export BDD

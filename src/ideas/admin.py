@@ -8,8 +8,8 @@ admin.site.register(Cart)
 @admin.register(Idea)
 class IdeaAdmin(admin.ModelAdmin):
     list_display = ("name", "summary", "level", "category",
-                    "thinker", "date", "status", "request", "paid", "price", "buyer", )
-    list_editable = ("status", "request", "paid", "price" )
+                    "thinker", "date", "status", "request", "paid", "price", "buyer", "ordered_date")
+    list_editable = ("status", "request", "paid", "price", "buyer")
     list_display_links = ("name", )
     search_fields = ("name", "details", "summary", )
     list_filter = ("status", "category", "paid", "request", )

@@ -165,8 +165,11 @@ def stripe_webhook(request):
         data = event['data']['object']
 
         user = get_object_or_404(Thinker, email=data['customer_details']['email'])
-        user.stripe_id = data["customer"]
-        user.save()
+        cart = user.cart
+
+        if not user.stripe_id:
+            user.stripe_id = data["customer"]
+            user.save()
 
         ShippingAddresse.objects.get_or_create(
             thinker=user,
@@ -177,6 +180,8 @@ def stripe_webhook(request):
             line2=data["shipping_details"]["address"]["line2"] or "",
             zip_code=data["shipping_details"]["address"]["postal_code"],
         )
+
+        cart.cart_paid(user=user)
 
     return HttpResponse(status=200)
 
