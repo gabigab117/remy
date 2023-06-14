@@ -66,18 +66,29 @@ def idea_detail_view(request, slug):
 def add_to_cart(request, slug):
     user = request.user
 
-    cart, _ = Cart.objects.get_or_create(buyer=user)
+    user_cart, _ = Cart.objects.get_or_create(buyer=user)
     idea = get_object_or_404(Idea, slug=slug)
 
     if request.method == "POST":
 
-        if idea in cart.ideas.all():
-            # on ne peut pas ajouter deux fois la même idée
+        if idea in user_cart.ideas.all():
+            # On ne peut pas ajouter deux fois la même idée
             messages.add_message(request, messages.ERROR, "L'idée est déjà dans le panier")
             return redirect("ideas:all")
+
+        for cart in Cart.objects.all():
+            # Je vérifie que l'idée ne soit pas dans le panier d'un autre
+            if idea in cart.ideas.all():
+                messages.add_message(request, messages.ERROR, "L'idée est déjà dans le panier de quelqu'un.")
+
+                if not user_cart.ideas.all():
+                    # Je supprime le panier créé s'il est vide
+                    user_cart.delete()
+                return redirect("ideas:all")
         else:
-            cart.ideas.add(idea)
-            # on ajoute au panier et on va dans la vue panier
+            user_cart.ideas.add(idea)
+            # On ajoute au panier et on va dans la vue panier
+
             return redirect("ideas:cart")
 
 
