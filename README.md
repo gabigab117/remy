@@ -1,10 +1,10 @@
 # a faire
-si dans un panier ne pas l'afficher
-ou au moment du paiement si idée achetée quand on paye ça bloque, nouveau webhook ?
 
 Espace perso où idées achetées. Que l'auteur puisse commenter avec l'acheteur. 
 Un espace avec mes idées où j'y ai tjs accès et je peux discuter avec l'acheteur
 donc pour le posteur de l'idée une page mes idées postées.
+
+!!! Si l'idée est achetée, seul l'auteur et l'acheteur doivent y avoir accès !
 
 # idée en plus
 Import / Export BDD

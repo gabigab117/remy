@@ -268,3 +268,25 @@ def contact_view(request):
 def contact_view_ok(request):
     return render(request, "ideas/contact-ok.html")
 
+
+# Vues pour les idées/demandes achetées et pour mes idées postées
+def my_ideas(request):
+    # Afficher les idées/demandes de l'utilisateur connecté
+    user = request.user
+
+    # Mes idées/demandes publiées
+    ideas_published = Idea.objects.filter(thinker=user, status=True, paid=False)
+
+    # Mes idées/demandes en attente de validation
+    ideas_waiting = Idea.objects.filter(thinker=user, status=False)
+
+    # Mes idées/demandes vendues
+    ideas_sold = Idea.objects.filter(thinker=user, paid=True)
+
+    # Mes idées/demandes achetées
+    ideas_bought = Idea.objects.filter(buyer=user)
+
+    return render(request, "ideas/my-ideas.html", context={"ideas_published": ideas_published,
+                                                           "ideas_waiting": ideas_waiting,
+                                                           "ideas_sold": ideas_sold,
+                                                           "ideas_bought": ideas_bought})

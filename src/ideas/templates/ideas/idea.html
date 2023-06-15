@@ -7,6 +7,7 @@
 
 
 {% block body %}
+{% if not idea.paid and idea.status %}
 {% if request.user.is_authenticated %}
 <div class="container text-center buy">
 	<form method="post" action="{% url 'ideas:add-to-cart' slug=idea.slug %}">
@@ -15,6 +16,7 @@
 	</form>
 	<h4>Prix : {{ idea.price }} €</h4>
 </div>
+{% endif %}
 {% endif %}
 
 <div class="container text-center idea">
@@ -40,7 +42,7 @@
 	</div>
 </div>
 
-
+{% if idea.status %}
 <div class="container text-center" style="margin-top:20px;">
 	<h3>Commentaires</h3>
 	{% for comment in comments %}
@@ -74,5 +76,5 @@
 
 
 </div>
-
+{% endif %}
 {% endblock %}

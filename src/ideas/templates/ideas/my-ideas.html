@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Mes idées / Demandes d'idées</title>
+
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container" style="margin-bottom: 15px;">
+	<div class="row">
+		<div class="col-6">
+			<h4>Mes idées publiées</h4>
+			{% for idea in ideas_published %}
+			<div class="card">
+				<div class="card-header">
+					Le {{ idea.date }} par {{ idea.thinker.username }}
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">
+						{{ idea.name }}
+					</h5>
+					<p class="card-text">
+						{{ idea.summary }}
+					</p>
+					<a href="{% url 'ideas:idea-detail' slug=idea.slug %}" class="btn btn-primary">Voir le détail</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+
+				<div class="col-6">
+			<h4>Mes idées vendues</h4>
+			{% for idea in ideas_sold %}
+			<div class="card">
+				<div class="card-header">
+					Le {{ idea.date }} par {{ idea.thinker.username }}
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">
+						{{ idea.name }}
+					</h5>
+					<p class="card-text">
+						{{ idea.summary }}
+					</p>
+					<a href="{% url 'ideas:idea-detail' slug=idea.slug %}" class="btn btn-primary">Voir le détail</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+		<div class="row" style="margin-top: 20px;">
+			<div class="col-6">
+			<h4>Mes idées/demandes en attente de validation</h4>
+			{% for idea in ideas_waiting %}
+			<div class="card">
+				<div class="card-header">
+					Le {{ idea.date }} par {{ idea.thinker.username }}
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">
+						{{ idea.name }}
+					</h5>
+					<p class="card-text">
+						{{ idea.summary }}
+					</p>
+					<a href="{% url 'ideas:idea-detail' slug=idea.slug %}" class="btn btn-primary">Voir le détail</a>
+				</div>
+			</div>
+			{% endfor %}
+
+			</div>
+			<div class="col-6">
+			<h4>Mes idées/demandes achetées</h4>
+			{% for idea in ideas_bought %}
+			<div class="card">
+				<div class="card-header">
+					Le {{ idea.date }} par {{ idea.thinker.username }}
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">
+						{{ idea.name }}
+					</h5>
+					<p class="card-text">
+						{{ idea.summary }}
+					</p>
+					<a href="{% url 'ideas:idea-detail' slug=idea.slug %}" class="btn btn-primary">Voir le détail</a>
+				</div>
+			</div>
+			{% endfor %}
+			</div>
+		</div>
+
+</div>
+
+{% endblock %}
