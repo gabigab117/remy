@@ -47,6 +47,15 @@ def index(request):
 def idea_detail_view(request, slug):
     user = request.user
     idea = get_object_or_404(Idea, slug=slug)
+    if idea.paid:
+        # Si l'idée est payée
+        if user != idea.thinker and user != idea.buyer:
+            # Si l'utilisateur est différent de l'auteur ou si l'utilisateur est différent de l'acheteur
+            # Si je suis auteur : False and True = False
+            # Si je suis acheteur : True and False = False
+            # Si je ne suis ni l'un ni l'autre : True and True = True
+            return HttpResponse(status=410)
+
     comments = Comment.objects.filter(idea=idea).order_by('date')
 
     if request.method == "POST":
@@ -270,6 +279,7 @@ def contact_view_ok(request):
 
 
 # Vues pour les idées/demandes achetées et pour mes idées postées
+@login_required()
 def my_ideas(request):
     # Afficher les idées/demandes de l'utilisateur connecté
     user = request.user

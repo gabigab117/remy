@@ -33,7 +33,7 @@ class Thinker(AbstractUser):
     email = models.EmailField(unique=True)
     company = models.CharField(max_length=500, blank=True, verbose_name="Entreprise")
     country = models.CharField(max_length=100, choices=countryphonelist.COUNTRY, verbose_name="Pays")
-    stripe_id = models.CharField(max_length=500)
+    stripe_id = models.CharField(max_length=500, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username", "phone", 'first_name', 'last_name', 'country']
