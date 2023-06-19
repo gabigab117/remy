@@ -142,6 +142,7 @@ def create_checkout_session(request):
         } for idea in cart.ideas.all()],
         "automatic_tax": {'enabled': True},
         "mode": 'payment',
+        "invoice_creation": {"enabled": True},
         "shipping_address_collection": {"allowed_countries": ["FR", "BE"]},
         "success_url": request.build_absolute_uri(reverse("ideas:checkout-success")),
         "cancel_url": 'http://127.0.0.1:8000'}
