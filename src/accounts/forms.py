@@ -21,3 +21,9 @@ class ThinkerProfilForm(forms.ModelForm):
         model = get_user_model()
         fields = ["email", "username", "password", "first_name",
                   "last_name", "phone", "company", "country"]
+
+
+class ThinkerEmailForm(forms.Form):
+    email = forms.EmailField(label="Email actuel")
+    new_email = forms.EmailField(label="Nouvel Email")
+    password = forms.CharField(widget=forms.PasswordInput(), label="Mot de passe")
