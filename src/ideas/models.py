@@ -106,7 +106,7 @@ class Cart(models.Model):
             idea.ordered_date = timezone.now()
             idea.save()
 
-        self.ideas.clear()
+        # self.ideas.clear() non nécéssaire
         self.delete()
 
     class Meta:
