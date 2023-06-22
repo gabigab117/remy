@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import signup, activate_account, login_thinker, logout_thinker, profil_thinker, \
     ThinkerPasswordChange, ThinkerPasswordReset, ThinkerPasswordResetDone, ThinkerPasswordResetConfirm, \
-    ThinkerPasswordResetComplete
+    ThinkerPasswordResetComplete, change_thinker_email
 
 app_name = "account"
 urlpatterns = [
@@ -10,6 +10,7 @@ urlpatterns = [
     path('login/', login_thinker, name='login'),
     path('logout/', logout_thinker, name="logout"),
     path('profile/', profil_thinker, name="profile"),
+    path('change-email', change_thinker_email, name="change-email"),
     path('new-password/', ThinkerPasswordChange.as_view(), name="change-password"),
     path('reset-password/', ThinkerPasswordReset.as_view(), name="reset-password"),
     path('reset-done/', ThinkerPasswordResetDone.as_view(), name="reset-done"),

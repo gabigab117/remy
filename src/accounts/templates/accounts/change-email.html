@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Modifier son email</title>
+{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-bottom: 15px;">
+{% if messages %}
+{% for message in messages %}
+	<h5 style="color: Red;">{{ message }}</h5>
+{% endfor %}
+{% endif %}
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+<form method="post" class="form">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+
+    <input class="btn btn-outline-primary" type="submit" value="Modifier">
+</form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

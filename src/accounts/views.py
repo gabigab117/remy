@@ -1,11 +1,13 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetDoneView, \
     PasswordResetConfirmView, PasswordResetCompleteView
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from verify_email.email_handler import send_verification_email
-from .forms import ThinkerCreationForm, ThinkerProfilForm
+from .forms import ThinkerCreationForm, ThinkerProfilForm, ThinkerEmailForm
 from .models import Thinker
 
 
@@ -50,6 +52,7 @@ def logout_thinker(request):
     return redirect('index')
 
 
+@login_required()
 def profil_thinker(request):
     context = {}
     if request.method == "POST":
@@ -70,6 +73,40 @@ def profil_thinker(request):
     context['form'] = ThinkerProfilForm(initial=model_to_dict(request.user, exclude='password'))
 
     return render(request, "accounts/profil.html", context=context)
+
+
+@login_required()
+def change_thinker_email(request):
+    user = request.user
+    all_users = Thinker.objects.all()
+    context = {}
+
+    if request.method == "POST":
+        form = ThinkerEmailForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data["email"] != user.email:
+                messages.add_message(request, messages.ERROR, "Mauvaise adresse mail actuelle renseignée")
+                return redirect("account:change-email")
+
+            user_auth = authenticate(email=form.cleaned_data["email"], password=form.cleaned_data["password"])
+
+            if user_auth:
+                for other_user in all_users:
+                    if form.cleaned_data["new_email"] == other_user.email:
+                        messages.add_message(request, messages.ERROR, "Email déjà utilisé")
+                        return redirect("account:change-email")
+
+                user.email = form.cleaned_data["new_email"]
+                user.save()
+                return redirect("account:change-email")
+
+            else:
+                messages.add_message(request, messages.ERROR, "Mot de passe invalide")
+                return redirect("account:change-email")
+
+    context["form"] = ThinkerEmailForm(initial={"email": user.email})
+
+    return render(request, "accounts/change-email.html", context=context)
 
 
 class ThinkerPasswordChange(PasswordChangeView):
