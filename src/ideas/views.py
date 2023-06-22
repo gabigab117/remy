@@ -3,7 +3,7 @@ import os
 
 import stripe
 from django.forms import model_to_dict
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -73,32 +73,42 @@ def idea_detail_view(request, slug):
 
 
 def add_to_cart(request, slug):
-    user = request.user
+    # user = request.user
+    #
+    # user_cart, _ = Cart.objects.get_or_create(buyer=user)
+    # idea = get_object_or_404(Idea, slug=slug)
+    #
+    # if request.method == "POST":
+    #
+    #     if idea in user_cart.ideas.all():
+    #         # On ne peut pas ajouter deux fois la même idée
+    #         messages.add_message(request, messages.ERROR, "L'idée est déjà dans le panier")
+    #         return redirect("ideas:all")
+    #
+    #     for cart in Cart.objects.all():
+    #         # Je vérifie que l'idée ne soit pas dans le panier d'un autre
+    #         if idea in cart.ideas.all():
+    #             messages.add_message(request, messages.ERROR, "L'idée est déjà dans le panier de quelqu'un.")
+    #     else:
+    #         user_cart.ideas.add(idea)
+    #         # On ajoute au panier et on va dans la vue panier
+    #
+    #         return redirect("ideas:cart")
 
+    user = request.user
     user_cart, _ = Cart.objects.get_or_create(buyer=user)
     idea = get_object_or_404(Idea, slug=slug)
 
-    if request.method == "POST":
+    if request.method != "POST":
+        raise Http404("Requête invalide")
 
-        if idea in user_cart.ideas.all():
-            # On ne peut pas ajouter deux fois la même idée
-            messages.add_message(request, messages.ERROR, "L'idée est déjà dans le panier")
-            return redirect("ideas:all")
-
-        for cart in Cart.objects.all():
-            # Je vérifie que l'idée ne soit pas dans le panier d'un autre
-            if idea in cart.ideas.all():
-                messages.add_message(request, messages.ERROR, "L'idée est déjà dans le panier de quelqu'un.")
-
-                if not user_cart.ideas.all():
-                    # Je supprime le panier créé s'il est vide
-                    user_cart.delete()
-                return redirect("ideas:all")
-        else:
-            user_cart.ideas.add(idea)
-            # On ajoute au panier et on va dans la vue panier
-
-            return redirect("ideas:cart")
+    if user_cart.ideas.filter(id=idea.id).exists() or Cart.objects.filter(ideas__id=idea.id).exists():
+        # si l'idée existe dans le panier ou si un panier avec l'idée existe
+        messages.add_message(request, messages.ERROR, "L'idée est déjà dans le panier")
+        return redirect("ideas:all")
+    else:
+        user_cart.ideas.add(idea)  # Ajoute l'idée au panier de l'utilisateur
+        return redirect("ideas:cart")
 
 
 @login_required()
