@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import idea_detail_view, ideas_and_request_ideas_view, contact_view, contact_view_ok, \
     IdeaCreateView, RequestIdeaCreateView, idea_create_confirm, request_idea_confirm, add_to_cart,\
-    cart, delete_from_cart, create_checkout_session, checkout_success, stripe_webhook, my_ideas
+    cart, delete_from_cart, create_checkout_session, checkout_success, stripe_webhook, my_ideas, about_us
 
 
 app_name = "ideas"
@@ -20,5 +20,6 @@ urlpatterns = [
     path('create/request-idea/', RequestIdeaCreateView.as_view(), name="create-request-idea"),
     path('create/idea-confirm/', idea_create_confirm, name="create-idea-confirm"),
     path('create/request-idea-confirm/', request_idea_confirm, name="create-request-idea-confirm"),
-    path('my-ideas', my_ideas, name="my-ideas"),
+    path('my-ideas/', my_ideas, name="my-ideas"),
+    path('about/', about_us, name="about"),
 ]

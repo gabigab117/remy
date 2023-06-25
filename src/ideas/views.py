@@ -311,3 +311,7 @@ def my_ideas(request):
                                                            "ideas_waiting": ideas_waiting,
                                                            "ideas_sold": ideas_sold,
                                                            "ideas_bought": ideas_bought})
+
+
+def about_us(request):
+    return render(request, "ideas/about.html")
