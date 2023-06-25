@@ -91,6 +91,7 @@ class Comment(models.Model):
 class Cart(models.Model):
     buyer = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Acheteur")
     ideas = models.ManyToManyField(Idea, verbose_name="Idées")
+    creation_date = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
 
     def total_cart(self):
         total = 0
@@ -113,4 +114,4 @@ class Cart(models.Model):
         verbose_name = "Panier"
 
     def __str__(self):
-        return f"Panier de {self.buyer}"
+        return f"Panier de {self.buyer} {self.creation_date}"
