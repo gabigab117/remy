@@ -1,7 +1,5 @@
 # a faire
 
-- safe de mon template
-
 - apps scheduler ou celery ou cronjob pour le panier
 
 - fichiers statics excel
