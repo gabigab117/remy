@@ -55,8 +55,9 @@ class IdeaTest(TestCase):
         self.assertEqual(resp.status_code, 302)
 
     def test_if_idea_bought_and_user_not_buyer_or_thinker(self):
-        c = Client()
-        c.login(email="gab@gab.com", password="12345678")
-        resp = c.get(self.idea2.get_absolute_url())
+        conect = self.client.login(user=self.thinker3)
+        if conect:
+            print("oui")
+        resp = self.client.get(self.idea2.get_absolute_url())
         self.assertEqual(resp.status_code, 410)
 
