@@ -1,11 +1,10 @@
 asgiref==3.6.0
-bleach==5.0.1
 certifi==2023.5.7
 cffi==1.15.1
 charset-normalizer==3.1.0
 cryptography==40.0.2
 Django==4.2.1
-django-bleach==3.0.1
+django-apscheduler==0.6.2
 django-ckeditor==6.5.1
 django-js-asset==2.0.0
 django-recaptcha==3.0.0
@@ -16,11 +15,13 @@ Pillow==9.5.0
 pycparser==2.21
 pyOpenSSL==23.1.1
 python-dotenv==1.0.0
+pytz==2023.3
 requests==2.31.0
 six==1.16.0
 sqlparse==0.4.4
 stripe==5.4.0
 tinycss2==1.1.1
 tzdata==2023.3
+tzlocal==5.0.1
 urllib3==2.0.2
 webencodings==0.5.1

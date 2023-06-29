@@ -1,20 +1,21 @@
 import os
-
 import stripe
+
+from django.core.paginator import Paginator
 from django.forms import model_to_dict
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
-
-from accounts.models import ShippingAddresse, Thinker
-from .models import Idea, Comment, Cart
-from django.views.generic import CreateView
-from .forms import ContactForm, IdeaCommentForm
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.views.generic import CreateView
+
+from accounts.models import ShippingAddresse, Thinker
+from .models import Idea, Comment, Cart
+from .forms import ContactForm, IdeaCommentForm
 from remy.settings import STRIPE_KEY
 
 
@@ -27,7 +28,7 @@ def index(request):
     count_ideas = Idea.objects.filter(status=True, paid=False, request=False).count()
     if count_ideas >= 4:
         context["ideas"]: Idea = Idea.objects.filter(status=True,
-                                                     paid=False, request=False)[count_ideas - 4:count_ideas][::-1]
+                                                     paid=False, request=False)[count_ideas - 4:count_ideas]
     else:
         context["ideas"]: Idea = Idea.objects.filter(status=True, paid=False, request=False)
 
@@ -35,7 +36,7 @@ def index(request):
     if count_request_ideas >= 4:
         context["request_ideas"]: Idea = \
             Idea.objects.filter(status=True,
-                                request=True, paid=False)[count_request_ideas - 4:count_request_ideas][::-1]
+                                request=True, paid=False)[count_request_ideas - 4:count_request_ideas]
     else:
         context["request_ideas"]: Idea = Idea.objects.filter(status=True, request=True, paid=False)
 
@@ -221,13 +222,18 @@ def ideas_and_request_ideas_view(request):
     ideas = Idea.objects.filter(status=True, paid=False, request=False)
     request_ideas = Idea.objects.filter(status=True, paid=False, request=True)
 
+    # paginator = Paginator(ideas | request_ideas, 1)
+    # page_number = request.GET.get("page")
+    # page_obj = paginator.get_page(page_number)
+
     if request.method == "GET":
         search = request.GET.get("search")
         if search:
             ideas = Idea.objects.filter(name__icontains=search, status=True, paid=False, request=False)
             request_ideas = Idea.objects.filter(name__icontains=search, status=True, paid=False, request=True)
 
-    return render(request, "ideas/all.html", context={'ideas': ideas, 'request_ideas': request_ideas})
+    return render(request, "ideas/all.html", context={'ideas': ideas,
+                                                      'request_ideas': request_ideas})
 
 
 class IdeaCreateView(LoginRequiredMixin, CreateView):

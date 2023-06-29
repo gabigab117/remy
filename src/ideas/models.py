@@ -73,6 +73,7 @@ class Idea(models.Model):
 
     class Meta:
         verbose_name = "Idée / Demande d'idée"
+        ordering = ["-date"]
 
 
 class Comment(models.Model):
