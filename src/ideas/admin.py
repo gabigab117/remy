@@ -12,6 +12,7 @@ class IdeaAdmin(admin.ModelAdmin):
     list_display_links = ("name", )
     search_fields = ("name", "details", "summary", )
     list_filter = ("status", "category", "paid", "request", )
+    list_per_page = 8
 
 
 @admin.register(Comment)

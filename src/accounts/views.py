@@ -15,11 +15,12 @@ def signup(request):
 
     if request.method == "POST":
         form = ThinkerCreationForm(request.POST)
+        # S'il n'est pas valide je vais au return avec les données
         if form.is_valid():
             # form.save()
             inactive_user = send_verification_email(request, form)
             return redirect('account:go-to-mailbox')
-
+    # Si get
     else:
 
         form = ThinkerCreationForm()
@@ -57,6 +58,7 @@ def profil_thinker(request):
     context = {}
     if request.method == "POST":
         user_auth = authenticate(email=request.POST.get("email"), password=request.POST.get("password"))
+        # Si pas auth je vais charger le formulaire avant le return puis return en prenant l'erreur au passage
         if user_auth:
             user: Thinker = request.user
             user.phone = request.POST.get('phone')
@@ -69,6 +71,7 @@ def profil_thinker(request):
             # https://docs.djangoproject.com/en/4.2/ref/contrib/messages/#using-messages-in-views-and-templates
             # messages.add_message(request, messages.ERROR, "Le mot de passe n'est pas valide")
             context['error'] = "Mot de passe invalide"
+
     # model_to_dict(instance)
     context['form'] = ThinkerProfilForm(initial=model_to_dict(request.user, exclude='password'))
 
@@ -83,6 +86,7 @@ def change_thinker_email(request):
 
     if request.method == "POST":
         form = ThinkerEmailForm(request.POST)
+        # SI pas valide je vais au formulaire avant le return puis return
         if form.is_valid():
             if form.cleaned_data["email"] != user.email:
                 messages.add_message(request, messages.ERROR, "Mauvaise adresse mail actuelle renseignée")
