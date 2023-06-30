@@ -30,7 +30,7 @@ class ThinkerManager(BaseUserManager):
 
 class Thinker(AbstractUser):
     phone = models.CharField(max_length=25, verbose_name="Téléphone")
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, max_length=100)
     company = models.CharField(max_length=500, blank=True, verbose_name="Entreprise")
     country = models.CharField(max_length=100, choices=countryphonelist.COUNTRY, verbose_name="Pays")
     stripe_id = models.CharField(max_length=500, blank=True)
