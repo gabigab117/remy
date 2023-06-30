@@ -6,6 +6,7 @@ from django.utils import timezone
 from accounts.models import Moderator
 from remy.settings import AUTH_USER_MODEL
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Category(models.Model):
@@ -35,7 +36,7 @@ class Idea(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, verbose_name="Catégorie", null=True)
     thinker = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 verbose_name="Utilisateur", related_name="ideas")
-    details = RichTextField(unique=True, verbose_name="Détails", max_length=10000)
+    details = RichTextUploadingField(unique=True, verbose_name="Détails")
     sketch = models.ImageField(upload_to="sketch_idea", blank=True, null=True, verbose_name="Croquis")
     date = models.DateField(auto_now_add=True)
     request = models.BooleanField(default=False, verbose_name="Demande d'idée",
@@ -77,7 +78,7 @@ class Idea(models.Model):
 
 
 class Comment(models.Model):
-    content = RichTextField(verbose_name="Message", max_length=10000)
+    content = RichTextUploadingField(verbose_name="Message")
     idea = models.ForeignKey(Idea, on_delete=models.CASCADE, verbose_name="idée")
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="utilisateur")
     date = models.DateTimeField(auto_now_add=True)
