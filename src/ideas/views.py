@@ -178,7 +178,7 @@ def stripe_webhook(request):
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     # Penser à renseigner une clé pour la prod
-    endpoint_secret = os.getenv('endpoint_secret')
+    endpoint_secret = os.environ.get('endpoint_secret')
     event = None
 
     try:

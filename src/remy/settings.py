@@ -91,10 +91,10 @@ if os.getenv("ENV_TYPE") == "PROD":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": os.getenv("DB_NAME"),
-            "USER": os.getenv("DB_USER"),
-            "PASSWORD": os.getenv("DB_USER_PASSWORD"),
-            "HOST": os.getenv("DB_HOST"),
+            "NAME": os.environ.get("DB_NAME"),
+            "USER": os.environ.get("DB_USER"),
+            "PASSWORD": os.environ.get("DB_USER_PASSWORD"),
+            "HOST": os.environ.get("DB_HOST"),
         }
     }
 else:
@@ -170,14 +170,14 @@ VERIFICATION_SUCCESS_TEMPLATE = "accounts/activate/verification_success.html"
 
 
 # Google recaptcha
-RECAPTCHA_PUBLIC_KEY = str(os.getenv('RECAPTCHA_PUBLIC_KEY'))
-RECAPTCHA_PRIVATE_KEY = str(os.getenv('RECAPTCHA_PRIVATE_KEY'))
+RECAPTCHA_PUBLIC_KEY = str(os.environ.get('RECAPTCHA_PUBLIC_KEY'))
+RECAPTCHA_PRIVATE_KEY = str(os.environ.get('RECAPTCHA_PRIVATE_KEY'))
 
 # stripe
-STRIPE_KEY = os.getenv('STRIPE_KEY')
+STRIPE_KEY = os.environ.get('STRIPE_KEY')
 
 # DEPLOY
-if os.getenv("ENV_TYPE") == "PROD":
+if os.environ.get("ENV_TYPE") == "PROD":
     # HTTPS settings
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
@@ -187,3 +187,30 @@ if os.getenv("ENV_TYPE") == "PROD":
     SECURE_HSTS_SECONDS = 31536000  # 1 year
     SECURE_HSTS_PRELOAD = True
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# CKEDITOR RESPONSIVE + Toolbar
+CKEDITOR_CONFIGS = {
+    'default': {
+        "toolbar_Full": [
+                [
+                    "Styles",
+                    "Format",
+                    "Bold",
+                    "Italic",
+                    "Underline",
+                    "Strike",
+                    "SpellChecker",
+                    "Undo",
+                    "Redo",
+                ],
+                ["Link", "Unlink", "Anchor"],
+                ["Image", "Flash", "Table", "HorizontalRule"],
+                ["TextColor", "BGColor"],
+                ["Smiley", "SpecialChar"],
+                # ["Source"],
+            ],
+
+        'width': 'auto',
+
+              },
+        }
