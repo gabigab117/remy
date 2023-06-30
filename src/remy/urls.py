@@ -11,7 +11,6 @@ urlpatterns = [
     path('account/', include('accounts.urls')),
     path('verification/', include('verify_email.urls')),
     path('ideas/', include('ideas.urls')),
-    path('ckeditor', include('ckeditor_uploader.urls')),
 ]
 
 if settings.DEBUG:

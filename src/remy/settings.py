@@ -49,11 +49,9 @@ INSTALLED_APPS = [
     'verify_email.apps.VerifyEmailConfig',
     'ideas',
     'ckeditor',
-    'ckeditor_uploader',
     'captcha',
 ]
 
-CKEDITOR_UPLOAD_PATH = "uploads/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
