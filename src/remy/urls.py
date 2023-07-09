@@ -6,7 +6,7 @@ from . import settings
 from ideas.views import index
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('superadmin/', admin.site.urls),
     path('', index, name="index"),
     path('account/', include('accounts.urls')),
     path('verification/', include('verify_email.urls')),
