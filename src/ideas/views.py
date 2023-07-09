@@ -18,7 +18,7 @@ from .models import Idea, Comment, Cart
 from .forms import ContactForm, IdeaCommentForm
 from remy.settings import STRIPE_KEY
 
-
+# On branch test
 stripe.api_key = STRIPE_KEY
 
 
@@ -222,15 +222,14 @@ def ideas_and_request_ideas_view(request):
     ideas = Idea.objects.filter(status=True, paid=False, request=False)
     request_ideas = Idea.objects.filter(status=True, paid=False, request=True)
 
-    # paginator = Paginator(ideas | request_ideas, 1)
+    search = request.GET.get("search")
+    if search:
+        ideas = Idea.objects.filter(name__icontains=search, status=True, paid=False, request=False)
+        request_ideas = Idea.objects.filter(name__icontains=search, status=True, paid=False, request=True)
+
+    # paginator = Paginator(ideas | request_ideas, 2)
     # page_number = request.GET.get("page")
     # page_obj = paginator.get_page(page_number)
-
-    if request.method == "GET":
-        search = request.GET.get("search")
-        if search:
-            ideas = Idea.objects.filter(name__icontains=search, status=True, paid=False, request=False)
-            request_ideas = Idea.objects.filter(name__icontains=search, status=True, paid=False, request=True)
 
     return render(request, "ideas/all.html", context={'ideas': ideas,
                                                       'request_ideas': request_ideas})

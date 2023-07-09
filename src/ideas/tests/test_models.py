@@ -26,7 +26,7 @@ class IdeaTest(TestCase):
                                                     last_name="Trouvé",
                                                     password="testtesttest",
                                                     is_active=True)
-        self.thinker3 = Thinker.objects.create_user(username="jj",
+        self.thinker3 = Thinker.objects.create_user(username="gabigab117",
                                                     phone="0344805112",
                                                     email="gab@gab.com",
                                                     country="France",
@@ -55,9 +55,12 @@ class IdeaTest(TestCase):
         self.assertEqual(resp.status_code, 302)
 
     def test_if_idea_bought_and_user_not_buyer_or_thinker(self):
-        conect = self.client.login(user=self.thinker3)
-        if conect:
-            print("oui")
+        self.thinker3.is_active = True
+        self.thinker3.save()
+        self.client.force_login(self.thinker3)
+
         resp = self.client.get(self.idea2.get_absolute_url())
+        print(resp)
+        print(self.thinker3.is_active)
         self.assertEqual(resp.status_code, 410)
 

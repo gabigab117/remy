@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+
+from django.contrib import admin
 from dotenv import load_dotenv
 import os
 import environ
