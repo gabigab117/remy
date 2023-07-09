@@ -5,8 +5,14 @@ from django.urls import path, include
 from . import settings
 from ideas.views import index
 
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 urlpatterns = [
-    path('superadmin/', admin.site.urls),
+    path(os.environ.get("ADMIN_URL"), admin.site.urls),
     path('', index, name="index"),
     path('account/', include('accounts.urls')),
     path('verification/', include('verify_email.urls')),
