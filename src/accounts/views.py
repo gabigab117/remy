@@ -22,7 +22,7 @@ def signup(request):
             return redirect('account:go-to-mailbox')
     # Si get
     else:
-
+    # si j'enlève le else et que je mets le form à ce niveau, en cas de post non valid j'ai un formulaire vide
         form = ThinkerCreationForm()
 
     return render(request, 'accounts/signup.html', context={"form": form})
