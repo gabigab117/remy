@@ -1,7 +1,6 @@
 # a faire
 
-- en prod penser à stripe
-- excel
-- penser remttre RichtextField
+- prévenir délais de 4 min mail et vérif spam
+- réglage heure serveur
 
 stripe listen --forward-to 127.0.0.1:8000/ideas/stripe-webhook/
