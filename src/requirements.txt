@@ -10,7 +10,6 @@ django-js-asset==2.0.0
 django-recaptcha==3.0.0
 Django-Verify-Email==2.0.3
 idna==3.4
-mysqlclient==2.1.1
 Pillow==9.5.0
 pycparser==2.21
 pyOpenSSL==23.1.1
